@@ -17,7 +17,7 @@ parser.add_argument('config_file', type=str, help='Ruta al archivo de configurac
 args = parser.parse_args()
 
 # Crear directorio results si no existe
-results_dir = 'results'
+results_dir = 'results_kohonen'
 if not os.path.exists(results_dir):
     os.makedirs(results_dir)
 
