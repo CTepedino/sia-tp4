@@ -6,7 +6,7 @@ class Kohonen:
         self.y = y  
         self.input_len = input_len  
         self.learning_rate = learning_rate
-        self.radius = max(x, y) / 2 if radius is None else radius
+        self.radius = max(max(x, y) / 2, 1) if radius is None else max(radius, 1)
         self.weights = np.random.rand(x, y, input_len)
         self.decay_function = decay_function if decay_function else lambda x, t, max_iter: x * np.exp(-t / max_iter)
 
