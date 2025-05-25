@@ -16,10 +16,6 @@ parser = argparse.ArgumentParser(description='Análisis de países usando SOM')
 parser.add_argument('config_file', type=str, help='Ruta al archivo de configuración JSON')
 args = parser.parse_args()
 
-# Crear directorio results si no existe
-results_dir = 'results_kohonen'
-if not os.path.exists(results_dir):
-    os.makedirs(results_dir)
 
 try:
     with open(args.config_file, 'r') as f:
@@ -39,6 +35,10 @@ data_norm = min_max_normalize(data)
 som_shape = (config['som_shape']['width'], config['som_shape']['height'])
 kohonen = Kohonen(som_shape[0], som_shape[1], input_len=data.shape[1], learning_rate=config['learning_rate'])
 kohonen.train(data_norm, num_iterations=config['iterations'])
+# Crear directorio results si no existe
+results_dir = f"results_kohonen/{config['learning_rate']}"
+if not os.path.exists(results_dir):
+    os.makedirs(results_dir)
 
 mapped = kohonen.map_input(data_norm)
 

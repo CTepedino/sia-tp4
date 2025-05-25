@@ -1,0 +1,14 @@
+{
+  "input_data": {
+    "test_letter": "H",
+    "noise_level": 0.5
+  },
+  "original_pattern": "*       *\n*       *\n* * * * *\n*       *\n*       *",
+  "noisy_pattern": "  * *    \n* *     *\n         \n*       *\n* *   * *",
+  "evolution_steps": [
+    "* * * * *\n*        \n*       *\n*        \n* * * * *",
+    "* * * * *\n*        \n*        \n*        \n* * * * *",
+    "* * * * *\n*        \n*        \n*        \n* * * * *"
+  ],
+  "final_pattern": "* * * * *\n*        \n*        \n*        \n* * * * *"
+}
