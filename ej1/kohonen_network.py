@@ -37,8 +37,12 @@ class KohonenNetwork(ABC):
         pass
 
     def best_neuron(self, input):
-        diff = self.network - input
-        dist = np.apply_along_axis(self.distance_function, 2, diff)
+
+        dist = np.empty((self.k, self.k))
+        for i in range(self.k):
+            for j in range(self.k):
+                dist[i, j] = self.distance_function(self.network[i, j], input)
+
         best_idx = np.unravel_index(np.argmin(dist, axis=None), dist.shape)
         return best_idx
 
@@ -46,11 +50,15 @@ class KohonenNetwork(ABC):
         return self.initial_learning_rate * math.exp(-t / total_iterations)
 
     def radius_decay(self, t, total_iterations):
-        return self.initial_radius * math.exp(-t / (total_iterations / math.log(self.initial_radius)))
+        if self.initial_radius == 1:
+            return 1
+        else:
+            return self.initial_radius * math.exp(-t / (total_iterations / math.log(self.initial_radius)))
 
     def train(self, data, iterations, seed=None):
         if seed is not None:
             random.seed(seed)
+            np.random.seed(seed)
 
         self.init_weights(data)
 
