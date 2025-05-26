@@ -4,7 +4,7 @@ import random
 
 import numpy as np
 
-from ej2.visualize_letter import visualize_letter
+from visualize_letter import visualize_letter
 
 patterns = {
     "A": [

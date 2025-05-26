@@ -8,18 +8,19 @@ def hamming_distance(a, b):
     return np.sum(np.array(a) != np.array(b))
 
 class HopfieldNetwork:
-    def __init__(self, stored_patterns):
+    def __init__(self, stored_patterns, check_input = False):
         self.pattern_count = len(stored_patterns)
         self.pattern_dimension = len(stored_patterns[0])
 
-        if not safe_storage(self.pattern_count, self.pattern_dimension):
-            print("Warning: Too many patterns given for the dimension")
+        if check_input:
+            if not safe_storage(self.pattern_count, self.pattern_dimension):
+                print("Warning: Too many patterns given for the dimension")
 
-        for i in range(self.pattern_count):
-            for j in range(i + 1, self.pattern_count):
-                d = hamming_distance(stored_patterns[i], stored_patterns[j])
-                if d < 0.3 * self.pattern_dimension:
-                    print(f"Warning: Patterns {i} and {j} are too similar")
+            for i in range(self.pattern_count):
+                for j in range(i + 1, self.pattern_count):
+                    d = hamming_distance(stored_patterns[i], stored_patterns[j])
+                    if d < 0.3 * self.pattern_dimension:
+                        print(f"Warning: Patterns {i} and {j} are too similar")
 
         stored_patterns = np.array(stored_patterns)
         self.weights = (1/self.pattern_dimension) * stored_patterns.transpose() @ stored_patterns

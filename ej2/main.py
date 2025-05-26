@@ -3,11 +3,9 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-from ej2.hopfield_network import HopfieldNetwork
-from ej2.letters import patterns, pattern_with_noise
-from ej2.visualize_letter import visualize_letter, process_animation
-from utils.json_matrix_encoder import CompactRowsEncoder
-
+from hopfield_network import HopfieldNetwork
+from letters import patterns, pattern_with_noise
+from visualize_letter import visualize_letter, process_animation
 
 def flatten_pattern(matrix):
     return [x for row in matrix for x in row]
@@ -54,7 +52,7 @@ if __name__ == "__main__":
 
     results_path = dir_path / "results.json"
     with open(results_path, "w") as f:
-        json.dump([result["energy"] for result in results], f, indent=4, cls=CompactRowsEncoder)
+        json.dump([result["energy"] for result in results], f, indent=4)
 
     animation_path = dir_path / "animation.mp4"
     process_animation([result["state"] for result in results], animation_path)
