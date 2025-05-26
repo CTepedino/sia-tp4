@@ -1,0 +1,39 @@
+Análisis de Grupos de Países:
+----------------------------
+
+Neurona (0, 0) contiene 1 países:
+Greece
+
+Neurona (0, 2) contiene 1 países:
+Luxembourg
+
+Neurona (0, 3) contiene 2 países:
+Iceland, Ireland
+
+Neurona (1, 1) contiene 1 países:
+Spain
+
+Neurona (1, 3) contiene 1 países:
+Switzerland
+
+Neurona (2, 0) contiene 4 países:
+Bulgaria, Estonia, Hungary, Latvia
+
+Neurona (2, 1) contiene 1 países:
+Poland
+
+Neurona (2, 2) contiene 6 países:
+Croatia, Czech Republic, Lithuania, Portugal, Slovakia, Slovenia
+
+Neurona (2, 3) contiene 4 países:
+Austria, Belgium, Denmark, Netherlands
+
+Neurona (3, 0) contiene 1 países:
+Ukraine
+
+Neurona (3, 2) contiene 5 países:
+Finland, Germany, Italy, Sweden, United Kingdom
+
+Neurona (3, 3) contiene 1 países:
+Norway
+

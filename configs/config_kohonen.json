@@ -1,0 +1,8 @@
+{
+    "som_shape": {
+        "width": 4,
+        "height": 4
+    },
+    "learning_rate": 0.9,
+    "iterations": 10000
+} 

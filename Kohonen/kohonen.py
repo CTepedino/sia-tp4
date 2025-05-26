@@ -2,12 +2,12 @@ import numpy as np
 
 class Kohonen:
     def __init__(self, x, y, input_len, learning_rate=0.5, radius=None, decay_function=None):
-        self.x = x  # ancho del mapa
-        self.y = y  # alto del mapa
-        self.input_len = input_len  # largo del vector de entrada
+        self.x = x
+        self.y = y  
+        self.input_len = input_len  
         self.learning_rate = learning_rate
-        self.radius = max(x, y) / 2 if radius is None else radius
-        self.weights = np.random.rand(x, y, input_len)  # pesos de cada neurona
+        self.radius = max(max(x, y) / 2, 1) if radius is None else max(radius, 1)
+        self.weights = np.random.rand(x, y, input_len)
         self.decay_function = decay_function if decay_function else lambda x, t, max_iter: x * np.exp(-t / max_iter)
 
     def _euclidean_distance(self, a, b):
