@@ -1,5 +1,3 @@
-import math
-
 import numpy as np
 
 
@@ -20,24 +18,40 @@ class HopfieldNetwork:
         for i in range(self.pattern_count):
             for j in range(i + 1, self.pattern_count):
                 d = hamming_distance(stored_patterns[i], stored_patterns[j])
-                if d < 0.9 * self.pattern_dimension:
-                    print(f"Warning: Patterns {i} and {j} are too similar (Hamming distance = {d})")
+                if d < 0.3 * self.pattern_dimension:
+                    print(f"Warning: Patterns {i} and {j} are too similar")
 
         stored_patterns = np.array(stored_patterns)
         self.weights = (1/self.pattern_dimension) * stored_patterns.transpose() @ stored_patterns
         np.fill_diagonal(self.weights, 0)
 
-    def get_stored(self, pattern, max_epochs = float('inf')):
+    def get_stored(self, pattern, max_epochs = float('inf'), detailed = False):
+
         state = np.array(pattern)
         epoch = 0
+        results = []
+
         while epoch < max_epochs:
+
             new_state = np.sign(self.weights @ state)
-            new_state[new_state == 0] = 1
-            print(f"Epoch: {epoch}, Energy: {self.energy(new_state)}")
+
+            #si alguno queda en 0, mantiene el valor del S anterior
+            zero_indexes = (new_state == 0)
+            new_state[zero_indexes] = state[zero_indexes]
+
+            if detailed:
+                results.append({"energy": self.energy(state), "state": state.tolist()})
+
             if np.array_equal(new_state, state):
+                results.append({"energy": self.energy(new_state), "state": new_state.tolist()})
                 break
+
             state = new_state
             epoch += 1
+
+        if detailed:
+            return results
+
         return state
 
     def energy(self, state):

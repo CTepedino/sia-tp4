@@ -1,0 +1,10 @@
+{
+  "stored_letters": [
+    "A",
+    "B",
+    "C",
+    "D"
+  ],
+  "test_letter": "C",
+  "noise_level": 3
+}

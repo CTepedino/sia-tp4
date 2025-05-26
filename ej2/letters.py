@@ -191,7 +191,7 @@ patterns = {
     ]
 }
 
-def add_noise_to_letter(letter, flips: int, seed = None):
+def pattern_with_noise(letter, flips: int, seed = None):
     if seed is not None:
         random.seed(seed)
     pattern = copy.deepcopy(patterns[letter])
@@ -214,5 +214,5 @@ if __name__ == "__main__":
     for letter, pattern in patterns.items():
         visualize_letter(pattern, f"{patterns_dir}/{letter}_pattern.jpg")
 
-    # pattern = add_noise_to_letter("C", 5, 42)
+    # pattern = pattern_with_noise("C", 5, 42)
     # visualize_letter(pattern)
