@@ -1,6 +1,5 @@
 import math
 import random
-from copy import deepcopy
 from abc import ABC, abstractmethod
 
 import numpy as np
@@ -17,8 +16,6 @@ class KohonenNetwork(ABC):
         self.k = k
         self.input_dim = input_dim
 
-        if initial_radius < 1:
-            raise ValueError("initial_radius must be at least 1")
         self.initial_radius = initial_radius
 
         self.distance_function = distance_function
