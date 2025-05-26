@@ -23,3 +23,4 @@ def visualize_letter(letter, filename = None):
         plt.show()
     else:
         plt.savefig(filename, bbox_inches='tight')
+        plt.close(fig)
