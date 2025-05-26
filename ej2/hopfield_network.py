@@ -20,7 +20,7 @@ class HopfieldNetwork:
         for i in range(self.pattern_count):
             for j in range(i + 1, self.pattern_count):
                 d = hamming_distance(stored_patterns[i], stored_patterns[j])
-                if d < 0.5 * self.pattern_dimension:
+                if d < 0.9 * self.pattern_dimension:
                     print(f"Warning: Patterns {i} and {j} are too similar (Hamming distance = {d})")
 
         stored_patterns = np.array(stored_patterns)
