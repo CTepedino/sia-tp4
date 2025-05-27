@@ -3,6 +3,7 @@
         "width": 4,
         "height": 4
     },
-    "learning_rate": 0.9,
-    "iterations": 10000
+    "learning_rate": 0.1,
+    "iterations": 10000,
+    "grid_type": "hex"
 } 
