@@ -1,0 +1,9 @@
+{
+  "geometry": "quad",
+  "k": 4,
+  "initial_r": 4,
+  "distance_fn": "euclidean",
+  "initial_lr": 0.5,
+  "iterations_per_n": 500,
+  "seed": 42
+}

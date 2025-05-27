@@ -1,0 +1,5 @@
+{
+  "epochs": 1,
+  "learning_rate": "decaying",
+  "seed": 42
+}
