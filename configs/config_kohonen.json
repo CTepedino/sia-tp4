@@ -1,9 +1,9 @@
 {
     "som_shape": {
         "width": 4,
-        "height": 4
+        "height": 3
     },
-    "learning_rate": 0.1,
+    "learning_rate": 0.05,
     "iterations": 10000,
     "grid_type": "hex"
 } 
