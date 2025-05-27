@@ -2,20 +2,20 @@ import random
 import numpy as np
 
 
-def constant_learning_rate(t):
-    return 1e-3
+def constant_learning_rate(initial_lr, t):
+    return initial_lr
 
-def decaying_learning_rate(t):
-    return (1e-2)/t
+def decaying_learning_rate(initial_lr, t):
+    return initial_lr/t
 
 class OjaNetwork:
-    def __init__(self, input_size, learning_rate_function, seed = None):
+    def __init__(self, input_size, initial_lr, learning_rate_function, seed = None):
         if seed is not None:
             random.seed(seed)
             np.random.seed(seed)
 
         self.weights = np.array([random.uniform(0, 1) for _ in range(input_size)])
-        self.learning_rate_function = learning_rate_function
+        self.learning_rate_function = lambda t: learning_rate_function(initial_lr, t)
 
     def weight_update(self, x, output, t):
         #return [w_i + self.learning_rate_function(t) * output * (x_i - w_i * output) for w_i, x_i in zip(self.weights, x)]

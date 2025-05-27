@@ -6,8 +6,10 @@ from datetime import datetime
 from oja_network import OjaNetwork, decaying_learning_rate, constant_learning_rate
 from utils.read_dataset import read_europe_dataset, read_europe_dataset_as_matrix
 from utils.normalization import standardize
+from pc1_graphics import generate_pc1_graphics
 
 import numpy as np
+from sklearn.decomposition import PCA
 
 learning_rates = {
     "constant": constant_learning_rate,
@@ -25,11 +27,23 @@ if __name__ == "__main__":
 
     network = OjaNetwork(
         input_size=len(data[0]),
+        initial_lr=config["initial_lr"],
         learning_rate_function=learning_rates[config["learning_rate"]],
         seed=seed
     )
 
     network.train(data, config.get("epochs", 500))
+
+    oja_pc1 = network.weights / np.linalg.norm(network.weights)
+
+    #pca por libreria
+    pca = PCA(n_components=1)
+    pca.fit(data)
+    library_pc1 = pca.components_[0]
+
+    similarity = np.dot(oja_pc1, library_pc1)
+
+
 
     results_dir = Path("ej1_2_results")
     results_dir.mkdir(exist_ok=True)
@@ -41,8 +55,19 @@ if __name__ == "__main__":
     with open(config_copy_path, "w") as f:
         json.dump(config, f, indent=4)
 
+
     results_info_path = dir_path / "results.json"
     with open(results_info_path, "w") as f:
-        json.dump({"weights": [float(w) for w in network.weights]}, f, indent=4)
+        json.dump({
+            "oja_pc1": [float(w) for w in oja_pc1],
+            "library_pc1": [float(w) for w in library_pc1],
+            "cosine_similarity": similarity
+        }, f, indent=4)
 
+    library_graphs_path = dir_path / "library"
+    library_graphs_path.mkdir(exist_ok=True)
+    generate_pc1_graphics(library_graphs_path, library_pc1, countries, data)
 
+    oja_graphs_path = dir_path / "oja"
+    oja_graphs_path.mkdir(exist_ok=True)
+    generate_pc1_graphics(oja_graphs_path, oja_pc1, countries, data)
