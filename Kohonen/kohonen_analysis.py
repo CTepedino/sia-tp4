@@ -7,10 +7,10 @@ import json
 import argparse
 import os
 
-def min_max_normalize(data):
-    min_vals = data.min(axis=0)
-    max_vals = data.max(axis=0)
-    return (data - min_vals) / (max_vals - min_vals)
+def standardize(data):
+    mean = data.mean(axis=0)
+    std = data.std(axis=0)
+    return (data - mean) / std
 
 def get_hex_coordinates(x, y):
     # Convert grid coordinates to hexagonal coordinates
@@ -46,7 +46,7 @@ except json.JSONDecodeError:
 df = pd.read_csv('europe.csv')
 countries = df["Country"].values
 data = df.drop(columns=["Country"]).values
-data_norm = min_max_normalize(data)
+data_norm = standardize(data)
 
 som_shape = (config['som_shape']['width'], config['som_shape']['height'])
 kohonen = Kohonen(som_shape[0], som_shape[1], input_len=data.shape[1], 
@@ -86,11 +86,19 @@ if config['grid_type'] == "hex":
             text_y = hex_y + offset * np.sin(angle)
             plt.text(text_x, text_y, country, fontsize=9, ha='center', va='center')
     
-    # Set appropriate limits for hexagonal grid
-    max_x = som_shape[0] * 1.5
-    max_y = som_shape[1] * np.sqrt(3) + np.sqrt(3) / 2
-    plt.xlim(-0.5, max_x + 0.5)
-    plt.ylim(-0.5, max_y + 0.5)
+    # Ajustar límites para que los hexágonos llenen el área
+    hex_radius = 1
+    centers_x = []
+    centers_y = []
+    for i in range(som_shape[0]):
+        for j in range(som_shape[1]):
+            x, y = get_hex_coordinates(i, j)
+            centers_x.append(x)
+            centers_y.append(y)
+    min_x, max_x = min(centers_x), max(centers_x)
+    min_y, max_y = min(centers_y), max(centers_y)
+    plt.xlim(min_x - hex_radius, max_x + hex_radius)
+    plt.ylim(min_y - hex_radius, max_y + hex_radius)
 else:
     # Original square grid plotting
     for (x, y), countries_list in neuron_groups.items():
@@ -116,7 +124,8 @@ if config['grid_type'] == "quad":
     plt.xticks(np.arange(som_shape[0]))
     plt.yticks(np.arange(som_shape[1]))
 
-plt.savefig(os.path.join(results_dir, 'country_clusters.png'))
+plt.tight_layout()
+plt.savefig(os.path.join(results_dir, 'country_clusters.png'), bbox_inches='tight')
 plt.close()
 
 def compute_u_matrix(model):
@@ -149,19 +158,30 @@ if config['grid_type'] == "hex":
             hex_y = y + np.sin(angles)
             plt.fill(hex_x, hex_y, color=plt.cm.bone_r(u_matrix[i, j]/u_matrix.max()))
     
+    # Ajustar límites para que los hexágonos llenen el área
+    hex_radius = 1
+    centers_x = []
+    centers_y = []
+    for i in range(som_shape[0]):
+        for j in range(som_shape[1]):
+            x, y = get_hex_coordinates(i, j)
+            centers_x.append(x)
+            centers_y.append(y)
+    min_x, max_x = min(centers_x), max(centers_x)
+    min_y, max_y = min(centers_y), max(centers_y)
+    plt.xlim(min_x - hex_radius, max_x + hex_radius)
+    plt.ylim(min_y - hex_radius, max_y + hex_radius)
+    
     norm = plt.Normalize(0, u_matrix.max())
     sm = plt.cm.ScalarMappable(cmap='bone_r', norm=norm)
     plt.colorbar(sm, ax=plt.gca(), label='Distancia')
-    max_x = som_shape[0] * 1.5
-    max_y = som_shape[1] * np.sqrt(3) + np.sqrt(3) / 2
-    plt.xlim(-0.5, max_x + 0.5)
-    plt.ylim(-0.5, max_y + 0.5)
 else:
     plt.imshow(u_matrix.T, cmap='bone_r', origin='lower')
     plt.colorbar(label='Distancia')
 
 plt.title("U-Matrix (Distancia entre neuronas vecinas)")
-plt.savefig(os.path.join(results_dir, 'u_matrix.png'))
+plt.tight_layout()
+plt.savefig(os.path.join(results_dir, 'u_matrix.png'), bbox_inches='tight')
 plt.close()
 
 frequencies = Counter(mapped)
@@ -180,19 +200,30 @@ if config['grid_type'] == "hex":
             hex_y = y + np.sin(angles)
             plt.fill(hex_x, hex_y, color=plt.cm.Blues(heatmap[i, j]/heatmap.max()))
     
+    # Ajustar límites para que los hexágonos llenen el área
+    hex_radius = 1
+    centers_x = []
+    centers_y = []
+    for i in range(som_shape[0]):
+        for j in range(som_shape[1]):
+            x, y = get_hex_coordinates(i, j)
+            centers_x.append(x)
+            centers_y.append(y)
+    min_x, max_x = min(centers_x), max(centers_x)
+    min_y, max_y = min(centers_y), max(centers_y)
+    plt.xlim(min_x - hex_radius, max_x + hex_radius)
+    plt.ylim(min_y - hex_radius, max_y + hex_radius)
+    
     norm = plt.Normalize(0, heatmap.max())
     sm = plt.cm.ScalarMappable(cmap='Blues', norm=norm)
     plt.colorbar(sm, ax=plt.gca(), label='Cantidad de países')
-    max_x = som_shape[0] * 1.5
-    max_y = som_shape[1] * np.sqrt(3) + np.sqrt(3) / 2
-    plt.xlim(-0.5, max_x + 0.5)
-    plt.ylim(-0.5, max_y + 0.5)
 else:
     plt.imshow(heatmap.T, cmap='Blues', origin='lower')
     plt.colorbar(label='Cantidad de países')
 
 plt.title("Cantidad de Países por Neurona")
-plt.savefig(os.path.join(results_dir, 'neuron_counts.png'))
+plt.tight_layout()
+plt.savefig(os.path.join(results_dir, 'neuron_counts.png'), bbox_inches='tight')
 plt.close()
 
 print("\nAnálisis de Grupos de Países:")
