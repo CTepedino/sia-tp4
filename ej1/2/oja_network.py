@@ -6,7 +6,7 @@ def constant_learning_rate(t):
     return 1e-3
 
 def decaying_learning_rate(t):
-    return 0.5/t
+    return (1e-2)/t
 
 class OjaNetwork:
     def __init__(self, input_size, learning_rate_function, seed = None):
@@ -25,12 +25,13 @@ class OjaNetwork:
         for epoch in range(epochs):
             random.shuffle(training_set)
             for x in training_set:
+                x = np.array(x)
                 output = np.dot(self.weights, x)
                 #output = sum(w * x_i for w, x_i in zip(self.weights, x))
                 self.weights = self.weight_update(x, output, epoch+1)
 
 
     def test(self, x):
-        return sum(w * x_i for w, x_i in zip(self.weights, x))
+        return np.dot(self.weights, x)
 
 

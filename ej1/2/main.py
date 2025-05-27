@@ -23,9 +23,6 @@ if __name__ == "__main__":
     countries, data = read_europe_dataset_as_matrix("europe.csv")
     data = standardize(np.array(data))
 
-
-    print(data)
-
     network = OjaNetwork(
         input_size=len(data[0]),
         learning_rate_function=learning_rates[config["learning_rate"]],
@@ -34,20 +31,18 @@ if __name__ == "__main__":
 
     network.train(data, config.get("epochs", 500))
 
-    print(network.weights)
+    results_dir = Path("ej1_2_results")
+    results_dir.mkdir(exist_ok=True)
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    dir_path = results_dir / f"output_{timestamp}"
+    dir_path.mkdir(exist_ok=True)
 
-    # results_dir = Path("ej1_2_results")
-    # results_dir.mkdir(exist_ok=True)
-    # timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    # dir_path = results_dir / f"output_{timestamp}"
-    # dir_path.mkdir(exist_ok=True)
-    #
-    # config_copy_path = dir_path / "config.json"
-    # with open(config_copy_path, "w") as f:
-    #     json.dump(config, f, indent=4)
-    #
-    # results_info_path = dir_path / "results.json"
-    # with open(results_info_path, "w") as f:
-    #     json.dump({"weights": [float(w) for w in network.weights]}, f, indent=4)
-    #
+    config_copy_path = dir_path / "config.json"
+    with open(config_copy_path, "w") as f:
+        json.dump(config, f, indent=4)
+
+    results_info_path = dir_path / "results.json"
+    with open(results_info_path, "w") as f:
+        json.dump({"weights": [float(w) for w in network.weights]}, f, indent=4)
+
 
