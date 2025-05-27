@@ -1,3 +1,4 @@
+import copy
 import sys
 import json
 from pathlib import Path
@@ -23,7 +24,12 @@ if __name__ == "__main__":
     seed = config.get("seed", None)
 
     countries, data = read_europe_dataset_as_matrix("europe.csv")
-    data = standardize(np.array(data))
+    data_scaled = standardize(np.array(data))
+
+    pca = PCA()
+    pca.fit(data_scaled)
+    library_pc1 = pca.components_[0]
+    library_pc1_scores = pca.transform(data_scaled)[:, 0]
 
     network = OjaNetwork(
         input_size=len(data[0]),
@@ -31,19 +37,15 @@ if __name__ == "__main__":
         learning_rate_function=learning_rates[config["learning_rate"]],
         seed=seed
     )
-
-    network.train(data, config.get("epochs", 500))
-
-    oja_pc1 = network.weights / np.linalg.norm(network.weights)
-
-    #pca por libreria
-    pca = PCA(n_components=1)
-    pca.fit(data)
-    library_pc1 = pca.components_[0]
-
-    similarity = np.dot(oja_pc1, library_pc1)
+    network.train(data_scaled, config.get("epochs", 500))
+    oja_pc1 = network.weights
+    oja_pc1_scores = data_scaled @ oja_pc1
 
 
+    similarity = np.dot(
+        oja_pc1 / np.linalg.norm(oja_pc1),
+        library_pc1 / np.linalg.norm(library_pc1)
+    )
 
     results_dir = Path("ej1_2_results")
     results_dir.mkdir(exist_ok=True)
@@ -66,8 +68,9 @@ if __name__ == "__main__":
 
     library_graphs_path = dir_path / "library"
     library_graphs_path.mkdir(exist_ok=True)
-    generate_pc1_graphics(library_graphs_path, library_pc1, countries, data)
+    generate_pc1_graphics(library_graphs_path, library_pc1, library_pc1_scores, countries)
 
     oja_graphs_path = dir_path / "oja"
     oja_graphs_path.mkdir(exist_ok=True)
-    generate_pc1_graphics(oja_graphs_path, oja_pc1, countries, data)
+    generate_pc1_graphics(oja_graphs_path, oja_pc1, oja_pc1_scores, countries)
+

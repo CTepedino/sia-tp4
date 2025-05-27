@@ -1,5 +1,5 @@
 {
   "epochs": 10000,
-  "learning_rate": "decaying",
-  "initial_lr": 0.2
+  "learning_rate": "constant",
+  "initial_lr": 1e-3
 }
