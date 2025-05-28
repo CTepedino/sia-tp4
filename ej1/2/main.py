@@ -1,11 +1,10 @@
-import copy
 import sys
 import json
 from pathlib import Path
 from datetime import datetime
 
 from oja_network import OjaNetwork, decaying_learning_rate, constant_learning_rate
-from utils.read_dataset import read_europe_dataset, read_europe_dataset_as_matrix
+from utils.read_dataset import read_europe_dataset_as_matrix
 from utils.normalization import standardize
 from pc1_graphics import generate_pc1_graphics
 
@@ -39,8 +38,9 @@ if __name__ == "__main__":
     )
     network.train(data_scaled, config.get("epochs", 500))
     oja_pc1 = network.weights
-    oja_pc1_scores = data_scaled @ oja_pc1
-
+    oja_pc1_scores = []
+    for country_values in data_scaled:
+        oja_pc1_scores.append(network.test(country_values))
 
     similarity = np.dot(
         oja_pc1 / np.linalg.norm(oja_pc1),
