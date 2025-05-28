@@ -106,3 +106,19 @@ class HexagonalKohonenNetwork(KohonenNetwork):
         return neighbours
 
 
+def compute_umatrix(network):
+    k = network.k
+    umatrix = np.zeros((k, k))
+
+    for i in range(k):
+        for j in range(k):
+            center = network.network[i, j]
+            neighbours = network.get_neighbours((i, j), radius=1.1)
+            dists = [
+                network.distance_function(center, network.network[ni, nj])
+                for ni, nj in neighbours if (ni, nj) != (i, j)
+            ]
+            umatrix[i, j] = np.mean(dists) if dists else 0
+
+    return umatrix
+

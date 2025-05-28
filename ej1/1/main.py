@@ -4,8 +4,9 @@ from datetime import datetime
 from pathlib import Path
 
 from utils.read_dataset import read_europe_dataset, read_europe_dataset_as_matrix
-from kohonen_network import QuadraticKohonenNetwork, HexagonalKohonenNetwork, euclidean_distance, exponential_distance
+from kohonen_network import QuadraticKohonenNetwork, HexagonalKohonenNetwork, euclidean_distance, exponential_distance, compute_umatrix
 from utils.normalization import standardize
+from graphics import *
 
 import numpy as np
 
@@ -18,6 +19,20 @@ distance_functions = {
     "euclidean": euclidean_distance,
     "exponential": exponential_distance
 }
+
+graphics = {
+    "quad": {
+        "heatmap": plot_registers_heatmap_quad,
+        "clusters": plot_country_clusters_quad,
+        "u_matrix": plot_u_matrix_quad
+    },
+    "hex": {
+        "heatmap": plot_registers_heatmap_hex,
+        "clusters": plot_country_clusters_hex,
+        "u_matrix": plot_u_matrix_hex
+    }
+}
+
 
 if __name__ == "__main__":
 
@@ -32,7 +47,7 @@ if __name__ == "__main__":
 
 
 
-    network = networks["quad"](
+    network = networks[config["geometry"]](
         k=config["k"],
         input_dim=data.shape[1],
         initial_radius=config["initial_r"],
@@ -44,11 +59,12 @@ if __name__ == "__main__":
     network.train(data, iterations=iterations_per_n * data.shape[1], seed=seed)
 
     clusters = {}
+    for i in range(config["k"]):
+        for j in range(config["k"]):
+            clusters[(i, j)] = []
 
     for i, x in enumerate(data):
         neuron = network.map(x)
-        if neuron not in clusters:
-            clusters[neuron] = []
         clusters[neuron].append(countries[i])
 
     for neuron, group in sorted(clusters.items()):
@@ -75,3 +91,10 @@ if __name__ == "__main__":
     clusters_info_path = dir_path / "clusters.json"
     with open(clusters_info_path, "w") as f:
         json.dump(clusters_printable, f, indent=4)
+
+    graphics_functions = graphics[config["geometry"]]
+
+    graphics_functions["heatmap"](dir_path, clusters, config["k"])
+    graphics_functions["clusters"](dir_path, clusters, config["k"])
+    graphics_functions["u_matrix"](dir_path, compute_umatrix(network))
+
