@@ -26,6 +26,7 @@ class HopfieldNetwork:
         self.weights = (1/self.pattern_dimension) * stored_patterns.transpose() @ stored_patterns
         np.fill_diagonal(self.weights, 0)
 
+
     def get_stored(self, pattern, max_epochs = float('inf'), detailed = False):
 
         state = np.array(pattern)

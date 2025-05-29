@@ -9,7 +9,6 @@ from matplotlib.patches import RegularPolygon
 
 
 def get_hex_coordinates(x, y):
-    # Convert grid coordinates to hexagonal coordinates
     hex_x = x * 1.5
     hex_y = y * np.sqrt(3) + (x % 2) * np.sqrt(3) / 2
     return hex_x, hex_y
@@ -102,7 +101,6 @@ def plot_country_clusters_hex(directory, clusters, k):
     for i in range(k):
         for j in range(k):
             x, y = get_hex_coordinates(i, j)
-            # Draw hexagon
             angles = np.linspace(0, 2*np.pi, 7)[:-1]
             hex_x = x + np.cos(angles)
             hex_y = y + np.sin(angles)

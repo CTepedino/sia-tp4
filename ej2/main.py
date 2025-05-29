@@ -47,6 +47,13 @@ if __name__ == "__main__":
     test_letter_path = dir_path / f"test_{config['test_letter']}_noise_{config['noise_level']}.png"
     visualize_letter(unflatten_pattern(test_pattern), test_letter_path)
 
+    def state_path(i):
+         return dir_path / f"state_{i}.png"
+    state_num = 1
+    for result in results:
+        visualize_letter(result["state"], state_path(state_num))
+        state_num += 1
+
     final_state_path = dir_path / "final_state.png"
     visualize_letter(results[-1]["state"], final_state_path)
 

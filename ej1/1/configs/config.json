@@ -1,5 +1,5 @@
 {
-  "geometry": "hex",
+  "geometry": "quad",
   "k": 4,
   "initial_r": 4,
   "distance_fn": "euclidean",
