@@ -1,4 +1,5 @@
 import copy
+import math
 import os
 import random
 
@@ -205,6 +206,9 @@ def pattern_with_noise(letter, flips: int, seed = None):
         pattern[row][col] = -pattern[row][col]
 
     return pattern
+
+def pattern_with_noise_percentage(letter, percentage: float, seed= None):
+    return pattern_with_noise(letter, math.ceil(percentage * (len(patterns[letter]) ** 2)), seed)
 
 
 if __name__ == "__main__":

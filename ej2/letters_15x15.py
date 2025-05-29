@@ -478,4 +478,4 @@ def visualize_letter_15x15(letter_matrix, filename=None):
         plt.close(fig)
 
 if __name__ == "__main__":
-    visualize_letter_15x15(letters["A"])
+    visualize_letter_15x15(letters["N"])

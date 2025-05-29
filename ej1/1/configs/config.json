@@ -1,9 +1,9 @@
 {
-  "geometry": "quad",
+  "geometry": "hex",
   "k": 4,
   "initial_r": 4,
   "distance_fn": "euclidean",
-  "initial_lr": 0.5,
-  "iterations_per_n": 500,
+  "initial_lr": 0.05,
+  "iterations_per_n": 1000,
   "seed": 42
 }

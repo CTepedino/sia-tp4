@@ -34,8 +34,8 @@ def calculate_success_rate(original, recovered):
 
 if __name__ == "__main__":
    
-    noise_level = 25
-    num_tests = 10000
+    noise_level = 125
+    num_tests = 1000
     all_letters = list(patterns.keys())
     
    

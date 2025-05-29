@@ -47,3 +47,4 @@ def process_animation(states, filename):
 
     plt.close(fig)
 
+
